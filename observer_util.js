@@ -1,5 +1,6 @@
-// STEP 11:  Refactor method names (apparently they are too verbose for the author)
-//  just search and replace addObserver -> observe, notifyObservers -> notify
+// STEP 12:  Refactor the code to accept arbitrary events based on a string identifier
+//  This is an exercise left for the student.  See book section 11.7 for more details
+//  For the really ambitious, do the exercise described at the end of section 11.7
 
 var observable = {};
 
