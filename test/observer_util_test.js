@@ -1,13 +1,5 @@
-// STEP 10:  Refactor so we can make arbitrary objects observable.  This needs to be done
-// a step at a time by introducing new functionality alongside existing functionality before 
-// removing/replacing obsolete functionality, adjusting and adding tests with each incremental change.
-// Steps:  
-// 1.  Empty Constructor
-// 2.  Adjust methods to initialize observers array if not already done
-// 3.  Replace constructor with an object definition
-// 4.  Refactor tests to use the observable object instead of constructor
-// 5.  We can then extend or relace any object's prototype to contain this 
-//     observable object's interface.  See Listing 11.32
+// STEP 11:  Refactor method names (apparently they are too verbose for the author)
+//  just search and replace addObserver -> observe, notifyObservers -> notify
 
 var should = require('should');
 
@@ -20,8 +12,8 @@ describe('Observable test suite', function() {
       var observable = Object.create(observer_util.observable);
       var observers = [function() {}, function() {}];
 
-      observable.addObserver(observers[0]);
-      observable.addObserver(observers[1]);
+      observable.observe(observers[0]);
+      observable.observe(observers[1]);
 
       observable.hasObserver(observers[0]).should.eql(true);
       observable.hasObserver(observers[1]).should.eql(true);
@@ -31,7 +23,7 @@ describe('Observable test suite', function() {
       var observable = Object.create(observer_util.observable);
 
       (function() {
-        observable.addObserver({});
+        observable.observe({});
       }).should.throwError('TypeError');
     });
   });
@@ -50,9 +42,9 @@ describe('Observable test suite', function() {
       var observer1 = function() { observer1.called = true;};
       var observer2 = function() { observer2.called = true;};
 
-      observable.addObserver(observer1);
-      observable.addObserver(observer2);
-      observable.notifyObservers();
+      observable.observe(observer1);
+      observable.observe(observer2);
+      observable.notify();
 
       observer1.called.should.eql(true);
       observer2.called.should.eql(true);
@@ -62,11 +54,11 @@ describe('Observable test suite', function() {
       var observable = Object.create(observer_util.observable);
       var actual;
 
-      observable.addObserver(function() {
+      observable.observe(function() {
         actual = arguments;
       });
 
-      observable.notifyObservers("String", 1, 32);
+      observable.notify("String", 1, 32);
       actual.should.eql(["String", 1, 32]);
     });
 
@@ -75,9 +67,9 @@ describe('Observable test suite', function() {
       var observer1 = function(){ throw new Error("Oops"); };
       var observer2 = function(){ observer2.called = true; };
 
-      observable.addObserver(observer1);
-      observable.addObserver(observer2);
-      observable.notifyObservers();
+      observable.observe(observer1);
+      observable.observe(observer2);
+      observable.notify();
 
       observer2.called.should.eql(true);
     });
@@ -88,9 +80,9 @@ describe('Observable test suite', function() {
       var observer1 = function(){ calls.push(observer1); };
       var observer2 = function(){ calls.push(observer2); };
 
-      observable.addObserver(observer1);
-      observable.addObserver(observer2);
-      observable.notifyObservers();
+      observable.observe(observer1);
+      observable.observe(observer2);
+      observable.notify();
 
       observer1.should.eql(calls[0]);
       observer2.should.eql(calls[1]);
@@ -100,7 +92,7 @@ describe('Observable test suite', function() {
       var observable = Object.create(observer_util.observable);
 
       (function() {
-        observable.notifyObservers({});
+        observable.notify({});
       }).should.not.throwError();
 
     });

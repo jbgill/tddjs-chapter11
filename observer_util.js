@@ -1,17 +1,9 @@
-// STEP 10:  Refactor so we can make arbitrary objects observable.  This needs to be done
-// a step at a time by introducing new functionality alongside existing functionality before 
-// removing/replacing obsolete functionality, adjusting and adding tests with each incremental change.
-// Steps:  
-// 1.  Empty Constructor
-// 2.  Adjust methods to initialize observers array if not already done
-// 3.  Replace constructor with an object definition
-// 4.  Refactor tests to use the observable object instead of constructor
-// 5.  We can then extend or relace any object's prototype to contain this 
-//     observable object's interface.  See Listing 11.32
+// STEP 11:  Refactor method names (apparently they are too verbose for the author)
+//  just search and replace addObserver -> observe, notifyObservers -> notify
 
 var observable = {};
 
-var addObserver = function(observer) {
+var observe = function(observer) {
   if (typeof observer != "function") {
     throw new TypeError("TypeError");
   }
@@ -20,7 +12,7 @@ var addObserver = function(observer) {
   }
   this.observers.push(observer);
 };
-observable.addObserver = addObserver;
+observable.observe = observe;
 
 var hasObserver = function(observer) {
   var i, l;
@@ -36,7 +28,7 @@ var hasObserver = function(observer) {
 };
 observable.hasObserver = hasObserver;
 
-var notifyObservers = function() {
+var notify = function() {
   var i,l;
   if (!this.observers) {
     return;
@@ -47,6 +39,6 @@ var notifyObservers = function() {
     } catch (e) {}
   }
 };
-observable.notifyObservers = notifyObservers;
+observable.notify = notify;
 
 exports.observable = observable;
