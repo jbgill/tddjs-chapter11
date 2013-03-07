@@ -1,4 +1,6 @@
-// STEP 7:  refactor the tests to eliminate the bad condition and duplication of code
+// STEP 8:  We need a new notifyObservers method to call the observers and pass arguments
+// through to them, so we need two new test cases (write tests first because they define 
+// the requirements of the method).
 
 var should = require('should');
 
@@ -24,6 +26,33 @@ describe('Observable test suite', function() {
       var observable = new observer_util.Observable();
 
       observable.hasObserver(function(){}).should.eql(false);
+    });
+  });
+
+  describe('ObservableNotifyObserversTest', function() {
+    it("should call all observers", function() {
+      var observable = new observer_util.Observable();
+      var observer1 = function() { observer1.called = true;};
+      var observer2 = function() { observer2.called = true;};
+
+      observable.addObserver(observer1);
+      observable.addObserver(observer2);
+      observable.notifyObservers();
+
+      observer1.called.should.eql(true);
+      observer2.called.should.eql(true);
+    });
+
+    it("should pass through arguments to observers", function() {
+      var observable = new observer_util.Observable();
+      var actual;
+
+      observable.addObserver(function() {
+        actual = arguments;
+      });
+
+      observable.notifyObservers("String", 1, 32);
+      actual.should.eql(["String", 1, 32]);
     });
   });
 

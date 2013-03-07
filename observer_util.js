@@ -1,5 +1,4 @@
-// STEP 7:  fix the failing test caused by line 13.  Note that we skipped the book section thart deals
-// with the IE 6 issue because we are running in Node.js.
+// STEP 8: Add the notifyObservers method and make it pass the tests (write tests first).
 
 var Observable = function() {
   this.observers = [];
@@ -20,5 +19,13 @@ var hasObserver = function(observer) {
   return false;
 };
 Observable.prototype.hasObserver = hasObserver;
+
+var notifyObservers = function() {
+  var i,l;
+  for (i=0,l=this.observers.length; i<l; i++) {
+    this.observers[i].apply(this, arguments);
+  }
+};
+Observable.prototype.notifyObservers = notifyObservers;
 
 exports.Observable = Observable;
