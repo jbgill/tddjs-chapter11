@@ -1,4 +1,4 @@
-// STEP 3:  Expose the hard-coded solution issue by augmenting the test.  Should fail now.
+// STEP 4:  Make the test pass
 
 var should = require('should');
 
@@ -15,7 +15,7 @@ describe('Observable test suite', function() {
       observable.addObserver(observers[1]);
 
       // we know this is a bad condition - we'll get to it later
-      observers.should.equal(observable.observers);
+      observers.should.eql(observable.observers);
     });
   });
 
