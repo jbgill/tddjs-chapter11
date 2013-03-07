@@ -1,7 +1,13 @@
-// STEP 9:  Add test cases for error handling error conditions.  From the book:
-// "Ensuring correct behavior in expected situations is important ... however, correct 
-// behavior even when the client is misbehaving is just as important to guarantee a 
-// stable and predictable system."
+// STEP 10:  Refactor so we can make arbitrary objects observable.  This needs to be done
+// a step at a time by introducing new functionality alongside existing functionality before 
+// removing/replacing obsolete functionality, adjusting and adding tests with each incremental change.
+// Steps:  
+// 1.  Empty Constructor
+// 2.  Adjust methods to initialize observers array if not already done
+// 3.  Replace constructor with an object definition
+// 4.  Refactor tests to use the observable object instead of constructor
+// 5.  We can then extend or relace any object's prototype to contain this 
+//     observable object's interface.  See Listing 11.32
 
 var should = require('should');
 
@@ -11,7 +17,7 @@ describe('Observable test suite', function() {
 
   describe('ObservableAddObserverTest', function() {
     it('should store the observer function', function() {
-      var observable = new observer_util.Observable();
+      var observable = Object.create(observer_util.observable);
       var observers = [function() {}, function() {}];
 
       observable.addObserver(observers[0]);
@@ -22,7 +28,7 @@ describe('Observable test suite', function() {
     });
 
     it("should throw for an uncallable observer", function() {
-      var observable = new observer_util.Observable();
+      var observable = Object.create(observer_util.observable);
 
       (function() {
         observable.addObserver({});
@@ -32,7 +38,7 @@ describe('Observable test suite', function() {
 
   describe('ObservableHasObserverTest', function() {
     it("should return false when we don't have the observer", function() {
-      var observable = new observer_util.Observable();
+      var observable = Object.create(observer_util.observable);
 
       observable.hasObserver(function(){}).should.eql(false);
     });
@@ -40,7 +46,7 @@ describe('Observable test suite', function() {
 
   describe('ObservableNotifyObserversTest', function() {
     it("should call all observers", function() {
-      var observable = new observer_util.Observable();
+      var observable = Object.create(observer_util.observable);
       var observer1 = function() { observer1.called = true;};
       var observer2 = function() { observer2.called = true;};
 
@@ -53,7 +59,7 @@ describe('Observable test suite', function() {
     });
 
     it("should pass through arguments to observers", function() {
-      var observable = new observer_util.Observable();
+      var observable = Object.create(observer_util.observable);
       var actual;
 
       observable.addObserver(function() {
@@ -65,9 +71,7 @@ describe('Observable test suite', function() {
     });
 
     it("should notify all even when some fail (throw an exception)", function() {
-      // Question:  What is a potential problem with this test case?
-
-      var observable = new observer_util.Observable();
+      var observable = Object.create(observer_util.observable);
       var observer1 = function(){ throw new Error("Oops"); };
       var observer2 = function(){ observer2.called = true; };
 
@@ -79,7 +83,7 @@ describe('Observable test suite', function() {
     });
 
     it("should call observers in the order they were added)", function() {
-      var observable = new observer_util.Observable();
+      var observable = Object.create(observer_util.observable);
       var calls = [];
       var observer1 = function(){ calls.push(observer1); };
       var observer2 = function(){ calls.push(observer2); };
@@ -90,6 +94,15 @@ describe('Observable test suite', function() {
 
       observer1.should.eql(calls[0]);
       observer2.should.eql(calls[1]);
+    });
+
+    it("should not fail if no observers yet", function() {
+      var observable = Object.create(observer_util.observable);
+
+      (function() {
+        observable.notifyObservers({});
+      }).should.not.throwError();
+
     });
   });
 
