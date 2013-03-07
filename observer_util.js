@@ -1,10 +1,13 @@
-// STEP 8: Add the notifyObservers method and make it pass the tests (write tests first).
+// STEP 9:  Add error handling (write test cases first!)
 
 var Observable = function() {
   this.observers = [];
 };
 
 var addObserver = function(observer) {
+  if (typeof observer != "function") {
+    throw new TypeError("TypeError");
+  }
   this.observers.push(observer);
 };
 Observable.prototype.addObserver = addObserver;
@@ -23,7 +26,9 @@ Observable.prototype.hasObserver = hasObserver;
 var notifyObservers = function() {
   var i,l;
   for (i=0,l=this.observers.length; i<l; i++) {
-    this.observers[i].apply(this, arguments);
+    try {
+      this.observers[i].apply(this, arguments);
+    } catch (e) {}
   }
 };
 Observable.prototype.notifyObservers = notifyObservers;

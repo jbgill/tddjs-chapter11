@@ -1,6 +1,7 @@
-// STEP 8:  We need a new notifyObservers method to call the observers and pass arguments
-// through to them, so we need two new test cases (write tests first because they define 
-// the requirements of the method).
+// STEP 9:  Add test cases for error handling error conditions.  From the book:
+// "Ensuring correct behavior in expected situations is important ... however, correct 
+// behavior even when the client is misbehaving is just as important to guarantee a 
+// stable and predictable system."
 
 var should = require('should');
 
@@ -18,6 +19,14 @@ describe('Observable test suite', function() {
 
       observable.hasObserver(observers[0]).should.eql(true);
       observable.hasObserver(observers[1]).should.eql(true);
+    });
+
+    it("should throw for an uncallable observer", function() {
+      var observable = new observer_util.Observable();
+
+      (function() {
+        observable.addObserver({});
+      }).should.throwError('TypeError');
     });
   });
 
@@ -53,6 +62,34 @@ describe('Observable test suite', function() {
 
       observable.notifyObservers("String", 1, 32);
       actual.should.eql(["String", 1, 32]);
+    });
+
+    it("should notify all even when some fail (throw an exception)", function() {
+      // Question:  What is a potential problem with this test case?
+
+      var observable = new observer_util.Observable();
+      var observer1 = function(){ throw new Error("Oops"); };
+      var observer2 = function(){ observer2.called = true; };
+
+      observable.addObserver(observer1);
+      observable.addObserver(observer2);
+      observable.notifyObservers();
+
+      observer2.called.should.eql(true);
+    });
+
+    it("should call observers in the order they were added)", function() {
+      var observable = new observer_util.Observable();
+      var calls = [];
+      var observer1 = function(){ calls.push(observer1); };
+      var observer2 = function(){ calls.push(observer2); };
+
+      observable.addObserver(observer1);
+      observable.addObserver(observer2);
+      observable.notifyObservers();
+
+      observer1.should.eql(calls[0]);
+      observer2.should.eql(calls[1]);
     });
   });
 
