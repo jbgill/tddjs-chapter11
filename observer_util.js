@@ -1,4 +1,4 @@
-// STEP 5:  We are adding a new Observer method.  Stub out the hasObserver function to keep the test passing
+// STEP 6:  new test will fail because of line 14
 
 var Observable = function() {
   this.observers = [];

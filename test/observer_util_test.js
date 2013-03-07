@@ -1,6 +1,4 @@
-// STEP 5: We realize that our ObservableAddOberverTest is making bad assumptions
-// about the implementation by accessing the observers array directly.  To help solve that we
-// will add a new method to Observable, called hasObserver.  We start with a new test.
+// STEP 6:  We need a new test to expose the hard-coded hasObserver
 
 var should = require('should');
 
@@ -29,6 +27,12 @@ describe('Observable test suite', function() {
       observable.addObserver(observer);
 
       observable.hasObserver(observer).should.eql(true);
+    });
+
+    it("should return false when we don't have the observer", function() {
+      var observable = new observer_util.Observable();
+
+      observable.hasObserver(function(){}).should.eql(false);
     });
   });
 
