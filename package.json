@@ -1,0 +1,10 @@
+{
+  "name": "tdjs-chap11",
+  "version": "0.0.1",
+  "description": "Node JS and Mocha version of TDJS Chapter 11",
+  "author": "JB",
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  }
+}
