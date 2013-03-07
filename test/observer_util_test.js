@@ -1,4 +1,4 @@
-// STEP 2:  first test.  Over in the obeserver source, we make it pass
+// STEP 3:  Expose the hard-coded solution issue by augmenting the test.  Should fail now.
 
 var should = require('should');
 
@@ -9,12 +9,13 @@ describe('Observable test suite', function() {
   describe('ObservableAddObserverTest', function() {
     it('should store the observer function', function() {
       var observable = new observer_util.Observable();
-      var observer = function() {};
+      var observers = [function() {}, function() {}];
 
-      observable.addObserver(observer);
+      observable.addObserver(observers[0]);
+      observable.addObserver(observers[1]);
 
       // we know this is a bad condition - we'll get to it later
-      observer.should.equal(observable.observers[0]);
+      observers.should.equal(observable.observers);
     });
   });
 
