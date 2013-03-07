@@ -1,4 +1,5 @@
-// STEP 6:  new test will fail because of line 14
+// STEP 7:  fix the failing test caused by line 13.  Note that we skipped the book section thart deals
+// with the IE 6 issue because we are running in Node.js.
 
 var Observable = function() {
   this.observers = [];
@@ -10,8 +11,13 @@ var addObserver = function(observer) {
 Observable.prototype.addObserver = addObserver;
 
 var hasObserver = function(observer) {
-  //TODO:  fix this, it's hardcoded
-  return true;
+  var i, l;
+  for (i=0,l=this.observers.length; i<l; i++) {
+    if (this.observers[i] == observer) {
+      return true;
+    }
+  }
+  return false;
 };
 Observable.prototype.hasObserver = hasObserver;
 
