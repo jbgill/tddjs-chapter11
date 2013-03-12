@@ -10,6 +10,7 @@ var Observable = function() {
 };
 
 var addObserver = function(observer) {
+  // this line 'feels dirty':
   this.observers = [observer];
 };
 Observable.prototype.addObserver = addObserver;
